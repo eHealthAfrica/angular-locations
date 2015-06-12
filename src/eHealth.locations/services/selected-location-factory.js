@@ -134,10 +134,14 @@ angular.module('eHealth.locations.services')
               }
             }
           } else {
-            // parent not selected. if we are running in incremental
-            // mode, we need to remove child levels
-            if (incremental && level) {
-              hide();
+            if (level) {
+              // parent not selected. if we are running in incremental
+              // mode, we need to remove child levels
+              if (incremental) {
+                hide();
+              } else {
+                updateDown(selected, depth +1);
+              }
             } else {
               // either end of the hierarchy or end of the levels we
               // want to show, if in incremental mode, since the
