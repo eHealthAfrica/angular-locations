@@ -5,6 +5,10 @@ file. This file is structured according to http://keepachangelog.com/
 
 - - -
 
+## 3.0.1 - 2015-09-02
+### Added
+- bumped locations dependency version to 3.0.1
+
 ## 2.1.0 - 2015-07-15
 ### Added
 - Added option to customize all item name
