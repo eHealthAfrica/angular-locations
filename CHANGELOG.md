@@ -6,8 +6,12 @@ file. This file is structured according to http://keepachangelog.com/
 - - -
 
 ## 3.0.1 - 2015-09-02
-### Added
-- bumped locations dependency version to 3.0.1
+### Changed
+- Bump locations to 3.0.1 (Add one missing deprecated location)
+
+## 3.0.0 - 2015-09-01
+### Changed
+- Bump locations to 3.0.0 (Deprecated Locations in Sierra Leone)
 
 ## 2.1.0 - 2015-07-15
 ### Added
