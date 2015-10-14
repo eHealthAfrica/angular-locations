@@ -5,6 +5,10 @@ file. This file is structured according to http://keepachangelog.com/
 
 - - -
 
+## 3.1.0 - 2015-10-13
+### Added
+- Upgrade locations to 3.1.0 (new level for Sierra Leone)
+
 ## 3.0.1 - 2015-09-02
 ### Changed
 - Bump locations to 3.0.1 (Add one missing deprecated location)
