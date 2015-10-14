@@ -5,6 +5,11 @@ file. This file is structured according to http://keepachangelog.com/
 
 - - -
 
+## 3.1.1 - 2015-10-13
+### Fixed
+- Actually updated the built files, which i (Francesco Occhipinti) forgot
+  before
+
 ## 3.1.0 - 2015-10-13
 ### Added
 - Upgrade locations to 3.1.0 (new level for Sierra Leone)
