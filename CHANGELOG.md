@@ -5,6 +5,12 @@ file. This file is structured according to http://keepachangelog.com/
 
 - - -
 
+## 3.1.2 - 2015-10-14
+### Changed
+- Adopted the new version of locations which is smaller, since it does
+  not include the fifth level. This is not breaking because the
+  previous versions were never used in production
+
 ## 3.1.1 - 2015-10-13
 ### Fixed
 - Actually updated the built files, which i (Francesco Occhipinti) forgot
