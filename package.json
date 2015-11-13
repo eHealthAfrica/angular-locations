@@ -1,9 +1,10 @@
 {
-  "name": "ehealthlocations",
+  "name": "angular-locations",
   "author": {
     "name": "Francesco Occhipinti",
     "email": "f.occhipinti@gmail.com"
   },
+  "license": "Apache-2.0",
   "description": "hierarchies of administrative divisions in west Africa, and some utility to maniplate them",
   "repository": {
     "type": "git",
