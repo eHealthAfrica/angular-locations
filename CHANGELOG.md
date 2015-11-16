@@ -4,11 +4,13 @@ All notable changes to this project will be documented in this
 file. This file is structured according to http://keepachangelog.com/
 
 - - -
-## unreleased
+## 3.2.0 - 2015-11-13
 ### Deleted
 - old License
 ### Added
 - license to package.json
+### Changed
+- Dependency bump: use location 3.2.0
 
 ## 3.1.4 - 2015-11-03
 ### Changed
