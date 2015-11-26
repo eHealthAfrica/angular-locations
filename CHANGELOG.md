@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this
 file. This file is structured according to http://keepachangelog.com/
 
 - - -
+## unreleased
+### Changed
+- Dependency bump: use location 3.3.0
+
 ## 3.2.0 - 2015-11-13
 ### Deleted
 - old License
