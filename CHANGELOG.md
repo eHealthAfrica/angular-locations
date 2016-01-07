@@ -5,6 +5,11 @@ file. This file is structured according to http://keepachangelog.com/
 
 - - -
 
+## 4.0.1 - 2015-01-07
+
+### Changed
+- Dependency bump: use location 4.0.1
+
 ## 4.0.0 - 2015-01-06
 
 breaking change.
