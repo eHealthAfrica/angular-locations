@@ -5,6 +5,12 @@ file. This file is structured according to http://keepachangelog.com/
 
 - - -
 
+## 4.0.3 - 2016-08-09
+
+### Fixed
+- Before releasing 4.0.2 i forgot the build step. This version fixes
+  it. So this version is the first actually using locations 4.0.2
+
 ## 4.0.2 - 2016-08-09
 
 ### Changed
