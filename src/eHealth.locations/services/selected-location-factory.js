@@ -57,27 +57,27 @@ angular.module('eHealth.locations.services')
         };
         function removeFilters(selected) {
           level.items = original.items;
-          if (hasAllItem) {
-            // adds an all-item.
-            // The all-item will be automatically selected when there is not
-            // a more narrow selection for this level or a child level
-            var allItem = {
-              isAll: true,
-              name: allItemName
-            };
-
-            // do not edit `level.items` in place! it might refer to
-            // external location data which we don't want to mess up
-            level.items = [allItem].concat(original.items);
-            if (selected) {
-              level.selected = allItem;
-            }
+          // adds an all-item.
+          // The all-item will be automatically selected when there is not
+          // a more narrow selection for this level or a child level
+          var allItem = {
+            isAll: true,
+            name: allItemName
+          };
+          // do not edit `level.items` in place! it might refer to
+          // external location data which we don't want to mess up
+          level.items = [allItem].concat(original.items);
+          if (selected) {
+            level.selected = allItem;
           }
         }
         function updateUp(selected, depth) {
           if (selected) {
-            if (depth < 0 || selected.isAll) {
+            if (depth < 0 ) {
               return;
+            }
+            if (selected.isAll) {
+              delete level.selected;
             }
             reset(depth);
             levels[depth].selectById(selected.parentId);
@@ -99,7 +99,7 @@ angular.module('eHealth.locations.services')
               if (level.items.length) {
                 if (level.selected) {
                   // in case we have an all-item, always select the all-item
-                  if (hasAllItem) {
+                  if (selected.isAll) {
                     level.selected = level.items[0];
                   } else {
                     // cancel the selection if invalid
@@ -261,7 +261,9 @@ angular.module('eHealth.locations.services')
         getInnermost: function () {
           var selected = levels.filter(function (l) { return l.selected; });
           var level = selected.slice(-1)[0];
-          return level ? level.selected : null;
+// Should probably change this, doesn't work:
+          // return level ? level.selected : null;
+          return (level && !level.selected.isAll) ? level.selected : null;
         },
         clear: function () {
           var root = levels[0];

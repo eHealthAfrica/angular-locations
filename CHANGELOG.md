@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this
 file. This file is structured according to http://keepachangelog.com/
 
 - - -
+## Unreleased - Upcoming
+### Added
+- 'All' will now always show up. If selected (no matter on which level), all levels are resetted.
 
 ## 4.0.3 - 2016-08-09
 
