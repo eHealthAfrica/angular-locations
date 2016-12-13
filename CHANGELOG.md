@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this
 file. This file is structured according to http://keepachangelog.com/
 
 - - -
+## 4.1.0 - 2016-13-12
+
+- Dependency bump: use location 4.1.0
 
 ## 4.0.3 - 2016-08-09
 
