@@ -34,10 +34,16 @@ describe('Service: locations', function () {
     });
     it('logs in debug', function(){
       expect($log.debug)
-        .toHaveBeenCalledWith('we cannot find code `missing` in locations level cercle');
+        .toHaveBeenCalledWith('we cannot find `missing` in locations level cercle');
     });
     it('returns undefined', function(){
       expect(result).toBe(undefined);
     });
+  });
+  it('finds the code for a name at a specific level', function(){
+    expect(locations.encode('Mopti', 1)).toBe('MM');
+  });
+  it('finds the code for a name ignoring case', function(){
+    expect(locations.encode('mopti', 1)).toBe('MM');
   });
 });

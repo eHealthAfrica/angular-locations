@@ -105,36 +105,46 @@ angular.module('eHealth.locations.services')
     };
     return function(countryCode) {
       if (countryCode in map) {
-        var locations = map[countryCode],
-            indexes = [];
-        indexes = locations.map(function(level) {
-          var index = {};
+        var locations = map[countryCode];
+        var indexes = locations.map(function(level) {
+          var index = {
+            id: {},
+            name: {}
+          };
           level.items.forEach(function(item) {
-            index[item.id] = item;
+            index.id[item.id] = item;
+            index.name[item.name.toLowerCase()] = item;
           });
           return index;
         });
-        locations.decode = function(code, l) {
-          if (typeof code === 'undefined') {
-            return;
-          } else {
-            var level = indexes[l];
-            if (level) {
-              if (level[code]) {
-                return level[code].name;
-              } else {
-                var message = 'we cannot find code `'+
-                      code+
-                      '` in locations level '+
-                      locations[l].name;
-                $log.debug(message);
-              }
+        var withErrorHandling = function (fun) {
+          return function (key, level) {
+            if (typeof key === 'undefined') {
+              return;
             } else {
-              $log.error(countryCode+' locations have only '+indexes.length+
-                         ' levels');
+              var index = indexes[level];
+              if (index) {
+                var maybeResult = fun(index, key);
+                if (maybeResult) {
+                  return maybeResult;
+                } else {
+                  var message = 'we cannot find `'+ key+ '` in locations level '+ locations[level].name;
+                  $log.debug(message);
+                }
+              } else {
+                $log.error(countryCode+' locations have only '+indexes.length+ ' levels');
+              }
             }
-          }
+          };
         };
+        locations.decode = withErrorHandling(function(index, id) {
+          var item = index.id[id];
+          return item && item.name;
+        });
+        locations.encode = withErrorHandling(function(index, name) {
+          var item = index.name[name.toLowerCase()];
+          return item && item.id;
+        });
         return locations;
       } else {
         var e = 'we have no location data for the country code `' +

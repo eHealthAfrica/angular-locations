@@ -6,6 +6,10 @@ To run the tests and build, run:
 
     $ grunt
 
+Make sure to have updated versions of your Bower dependencies,
+otherwise your older versions will get into the built files. You can
+update running `bower update`.
+
 To add a new country:
 
 * update `bower.json` to the new version of eHealthAfrica/locations containing the country.
