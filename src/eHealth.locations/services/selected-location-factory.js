@@ -156,6 +156,7 @@ angular.module('eHealth.locations.services')
         }
         level.update = function () {
           updateUp(level.selected, index - 1);
+          level.filterByParent(level.select.parentId)
           updateDown(level.selected, index + 1);
         };
         level.deselect = function() {
