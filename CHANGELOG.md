@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this
 file. This file is structured according to http://keepachangelog.com/
 
 - - -
+## 4.2.1 - 2017-01-31
+
+### Fixed
+
+- Current selection drop-down remains filtered after select [CCSL-1930]
+
 ## 4.2.0 - 2016-15-12
 
 - Add an `encode` method to location levels
