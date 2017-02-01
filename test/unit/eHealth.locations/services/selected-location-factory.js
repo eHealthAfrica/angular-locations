@@ -5,6 +5,11 @@
 // location remembers what we selected, and it automatically updates
 // locations in the contained levels
 
+var FIRST = 0,
+    SECOND = 1,
+    THIRD = 2,
+    FOURTH = 3;
+
 var testLocationData = [{
   depth: 0,
   name: 'Zero',
@@ -94,39 +99,63 @@ describe('Service: SelectedLocationFactory', function () {
         expect(location).toBeDefined();
       });
     });
+
+    var count = 0
     describe('producing a selected location with default options', function() {
+      function selectFirst(depth) {
+        var level = location.levels[depth];
+        // here i am emulating user actions bound to Javascript
+        // objects via Angular, so i use this interface even if it
+        // is less convenient
+        level.selected = level.items[0];
+        level.update();
+      }
       beforeEach(function() {
         location = selectedLocationFactory();
       });
-      it('has quite a large number of third level items', function() {
-        expect(location.levels[2].items.length).toBe(850);
+
+      it('shows unfiltered options initially', function() {
+        expect(location.levels[FIRST].items.length).toBe(16)
+        expect(location.levels[SECOND].items.length).toBe(180)
+        expect(location.levels[THIRD].items.length).toBe(850);
+        expect(location.levels[FOURTH].items.length).toBe(13361);
       });
       describe('when first and second level get selected', function() {
-        function selectFirst(depth) {
-          var level = location.levels[depth];
-          // here i am emulating user actions bound to Javascript
-          // objects via Angular, so i use this interface even if it
-          // is less convenient
-          level.selected = level.items[0];
-          level.update();
-        }
         beforeEach(function() {
-          selectFirst(0);
-          selectFirst(1);
+          selectFirst(FIRST);
+          selectFirst(SECOND);
         });
         it('limits the number of options for the third level', function() {
-          expect(location.levels[2].items.length).toBe(14);
+          expect(location.levels[THIRD].items.length).toBe(14);
+        });
+        // skip test: fix not yet implemented
+        xit('does limits the number for the fourth level', function () {
+          expect(location.levels[FOURTH].items.length).toBe(13361);
         });
         describe('when third and fourth level get selected', function() {
           beforeEach(function() {
-            selectFirst(2);
-            selectFirst(3);
+            selectFirst(THIRD);
+            selectFirst(FOURTH);
           });
-          it('still show limited options for the third level', function() {
-            expect(location.levels[2].items.length).toBe(14);
+          it('still show limited options for the preceding levels', function() {
+            expect(location.levels[FIRST].items.length).toBe(16);
+            expect(location.levels[SECOND].items.length).toBe(8);
+            expect(location.levels[THIRD].items.length).toBe(14);
           });
         });
       });
+      describe('when a lower level without selecting the parent levels first', function () {
+        beforeEach(function () {
+          selectFirst(THIRD)
+        });
+        it('filters the higher level', function () {
+          expect(location.levels[SECOND].items.length).toBe(8);
+        });
+        // skip test: fix not yet implemented
+        xit('filters the current level', function () {
+          expect(location.levels[THIRD].items.length).toBe(16);
+        });
+      })
     });
   });
 
@@ -155,44 +184,44 @@ describe('Service: SelectedLocationFactory', function () {
         // this funny interface in actually convenient in the templates,
         // in order to bind `selected` with a model and `update` with an
         // `ngChange` directive
-        var level = location.levels[2];
+        var level = location.levels[THIRD];
         level.selected = level.items[0];
         level.update();
-        expect(location.levels[0].selected.id).toBe(1);
-        expect(location.levels[1].selected.id).toBe(1);
-        expect(location.levels[2].selected.id).toBe(1);
+        expect(location.levels[FIRST].selected.id).toBe(1);
+        expect(location.levels[SECOND].selected.id).toBe(1);
+        expect(location.levels[THIRD].selected.id).toBe(1);
       });
       it('supports a simpler interface', function () {
         location.select(2, 1);
-        expect(location.levels[0].selected.id).toBe(1);
-        expect(location.levels[1].selected.id).toBe(1);
-        expect(location.levels[2].selected.id).toBe(1);
+        expect(location.levels[FIRST].selected.id).toBe(1);
+        expect(location.levels[SECOND].selected.id).toBe(1);
+        expect(location.levels[THIRD].selected.id).toBe(1);
       });
       it('restricts levels below when the topmost is selected', function() {
-        var level = location.levels[0];
+        var level = location.levels[FIRST];
         level.selected = level.items[0];
         level.update();
-        expect(location.levels[0].items.length).toBe(2);
-        expect(location.levels[1].items.length).toBe(1);
-        expect(location.levels[1].selected).toBeUndefined()
-        expect(location.levels[2].items.length).toBe(2);
-        expect(location.levels[1].selected).toBeUndefined()
+        expect(location.levels[FIRST].items.length).toBe(2);
+        expect(location.levels[SECOND].items.length).toBe(1);
+        expect(location.levels[SECOND].selected).toBeUndefined()
+        expect(location.levels[THIRD].items.length).toBe(2);
+        expect(location.levels[SECOND].selected).toBeUndefined()
       });
       it('unselects levels below if conflicting with the parent', function() {
-        location.levels[1].selected = { id: 2};
-        location.levels[0].selected = { id: 1};
-        location.levels[0].update();
-        expect(location.levels[1].selected).toBeUndefined();
+        location.levels[SECOND].selected = { id: 2};
+        location.levels[FIRST].selected = { id: 1};
+        location.levels[FIRST].update();
+        expect(location.levels[SECOND].selected).toBeUndefined();
       });
       it('keeps levels below if compatible with the parent', function() {
-        location.levels[1].selected = {id: 1};
-        location.levels[0].selected = {id: 1};
-        location.levels[0].update();
-        expect(location.levels[1].selected.id).toBe(1);
+        location.levels[SECOND].selected = {id: 1};
+        location.levels[FIRST].selected = {id: 1};
+        location.levels[FIRST].update();
+        expect(location.levels[SECOND].selected.id).toBe(1);
       });
       it('throws an error when selecting not existing ids', function() {
         expect(function() {
-          location.level[1].selectBy('bullshit');
+          location.level[SECOND].selectBy('bullshit');
         }).toThrow();
       });
       it('can clone itself and compare', function() {
@@ -200,36 +229,36 @@ describe('Service: SelectedLocationFactory', function () {
         expect(cloned.compare(location)).toBe(true);
       });
       it('can clone itself and compare also selected items', function() {
-        location.levels[0].selected = location.levels[0].items[0];
+        location.levels[FIRST].selected = location.levels[FIRST].items[0];
         var cloned = location.clone();
         expect(cloned.compare(location)).toBe(true);
-        expect(location.levels[0].selected).toEqual(cloned.levels[0].selected);
+        expect(location.levels[FIRST].selected).toEqual(cloned.levels[FIRST].selected);
       });
       it('reads admin divisions', function() {
         location.setAdminDivisions({
           adminDivision1: 1,
           adminDivision2: 1
         });
-        expect(location.levels[0].selected.name).toBe('zero one');
-        expect(location.levels[1].selected.name).toBe('one one');
-        expect(location.levels[2].selected).toBeUndefined();
+        expect(location.levels[FIRST].selected.name).toBe('zero one');
+        expect(location.levels[SECOND].selected.name).toBe('one one');
+        expect(location.levels[THIRD].selected).toBeUndefined();
       });
       it('ignores inconsistent parents', function() {
         location.setAdminDivisions({
           adminDivision1: 1,
           adminDivision2: 2
         });
-        expect(location.levels[0].selected.name).toBe('zero two');
-        expect(location.levels[1].selected.name).toBe('one two');
-        expect(location.levels[2].selected).toBeUndefined();
+        expect(location.levels[FIRST].selected.name).toBe('zero two');
+        expect(location.levels[SECOND].selected.name).toBe('one two');
+        expect(location.levels[THIRD].selected).toBeUndefined();
       });
       it('ignores undefined parents', function() {
         location.setAdminDivisions({
           adminDivision2: 2
         });
-        expect(location.levels[0].selected.name).toBe('zero two');
-        expect(location.levels[1].selected.name).toBe('one two');
-        expect(location.levels[2].selected).toBeUndefined();
+        expect(location.levels[FIRST].selected.name).toBe('zero two');
+        expect(location.levels[SECOND].selected.name).toBe('one two');
+        expect(location.levels[THIRD].selected).toBeUndefined();
       });
       it('ignores missing codes, check issue #2', function() {
         expect(function() {
@@ -274,18 +303,18 @@ describe('Service: SelectedLocationFactory', function () {
           });
         });
         it('has all-items on each level as first element', function() {
-          expect(locsWithAll.levels[0].items[0].isAll);
-          expect(locsWithAll.levels[1].items[0].isAll);
-          expect(locsWithAll.levels[2].items[0].isAll);
+          expect(locsWithAll.levels[FIRST].items[0].isAll);
+          expect(locsWithAll.levels[SECOND].items[0].isAll);
+          expect(locsWithAll.levels[THIRD].items[0].isAll);
         });
         it('should select child-level all-items on parent change', function() {
-          locsWithAll.levels[1].selected = locsWithAll.levels[1].items[1];
-          locsWithAll.levels[0].selected = locsWithAll.levels[0].items[1];
-          locsWithAll.levels[0].update();
-          expect(locsWithAll.levels[1].selected.isAll);
+          locsWithAll.levels[SECOND].selected = locsWithAll.levels[SECOND].items[1];
+          locsWithAll.levels[FIRST].selected = locsWithAll.levels[FIRST].items[1];
+          locsWithAll.levels[FIRST].update();
+          expect(locsWithAll.levels[SECOND].selected.isAll);
         });
         it('should have custom text all-item name', function() {
-          expect(locsWithAll.levels[0].items[0].name).toBe('foo');
+          expect(locsWithAll.levels[FIRST].items[0].name).toBe('foo');
         });
       });
     });
@@ -303,11 +332,11 @@ describe('Service: SelectedLocationFactory', function () {
         });
 
         it('should filter locations by user restriction when passed with restrict flag', function () {
-          expect(location.levels[0].items.length).toBe(1);
-          expect(location.levels[1].items.length).toBe(0);
-          expect(location.levels[2].items.length).toBe(1);
-          expect(location.levels[0].items[0].name).toEqual(mockCurrentUser.locations[1].name);
-          expect(location.levels[2].items[0].name).toEqual(mockCurrentUser.locations[0].name);
+          expect(location.levels[FIRST].items.length).toBe(1);
+          expect(location.levels[SECOND].items.length).toBe(0);
+          expect(location.levels[THIRD].items.length).toBe(1);
+          expect(location.levels[FIRST].items[0].name).toEqual(mockCurrentUser.locations[1].name);
+          expect(location.levels[THIRD].items[0].name).toEqual(mockCurrentUser.locations[0].name);
         });
       });
 
@@ -319,9 +348,9 @@ describe('Service: SelectedLocationFactory', function () {
         });
 
         it('should not filter locations by user restriction when not passed with restrict flag', function() {
-          expect(location.levels[0].items.length).toBe(2);
-          expect(location.levels[1].items.length).toBe(2);
-          expect(location.levels[2].items.length).toBe(2);
+          expect(location.levels[FIRST].items.length).toBe(2);
+          expect(location.levels[SECOND].items.length).toBe(2);
+          expect(location.levels[THIRD].items.length).toBe(2);
         });
       });
     });
@@ -354,14 +383,14 @@ describe('Service: SelectedLocationFactory', function () {
           });
         });
         it('allows to deselect a level and all the levels below', function() {
-          location.levels[1].deselect();
+          location.levels[SECOND].deselect();
           expect(location.getAdminDivisions()).toEqual({
             adminDivision1 : 'B'
           });
         });
         it('can update after deselect', function() {
-          location.levels[1].deselect();
-          location.levels[1].update();
+          location.levels[SECOND].deselect();
+          location.levels[SECOND].update();
           expect(location.getAdminDivisions()).toEqual({
             adminDivision1 : 'B'
           });
@@ -396,7 +425,7 @@ describe('Service: SelectedLocationFactory', function () {
     });
     describe('after the first level is selected', function() {
       beforeEach(function() {
-        var level = location.levels[0];
+        var level = location.levels[FIRST];
         level.selected = level.items[0];
         level.update();
       });
@@ -405,7 +434,7 @@ describe('Service: SelectedLocationFactory', function () {
       });
       describe('the second level is selected', function(){
         beforeEach(function(){
-          var level = location.levels[1];
+          var level = location.levels[SECOND];
           level.selected = level.items[0];
           level.update();
         });
@@ -414,7 +443,7 @@ describe('Service: SelectedLocationFactory', function () {
         });
         describe('the third level is selected', function() {
           beforeEach(function(){
-            var level = location.levels[2];
+            var level = location.levels[THIRD];
             level.selected = level.items[0];
             level.update();
           });
@@ -422,19 +451,19 @@ describe('Service: SelectedLocationFactory', function () {
             expect(location.levels.length).toBe(4);
           });
           it('shows the right items in the fourth level', function() {
-            expect(location.levels[3].items[0].parentId)
+            expect(location.levels[FOURTH].items[0].parentId)
               .toBe('BASS : Commonwealth : Buchanan Port');
-            expect(location.levels[3].items.length).toBe(1);
+            expect(location.levels[FOURTH].items.length).toBe(1);
           });
         });
         describe('the first level is changed', function() {
           beforeEach(function(){
-            var level = location.levels[0];
+            var level = location.levels[FIRST];
             level.selected = level.items[2];
             level.update();
           });
           it('unselects the second level', function(){
-            expect(location.levels[1].selected).toBeFalsy();
+            expect(location.levels[SECOND].selected).toBeFalsy();
           });
           it('shows the second level, not the third', function(){
             expect(location.levels.length).toBe(2);
@@ -447,7 +476,7 @@ describe('Service: SelectedLocationFactory', function () {
       location.select(1, 'BASS : Commonwealth');
       location.select(2, 'BASS : Commonwealth : Buchanan Port');
       expect(location.levels.length).toBe(4);
-      expect(location.levels[3].items.length).toBe(1);
+      expect(location.levels[FOURTH].items.length).toBe(1);
     });
     it('does not show levels when all their items are filtered', function() {
       location.select(0, 'MONT');
@@ -495,9 +524,9 @@ describe('Service: SelectedLocationFactory', function () {
       var parent, level2, level3;
 
       beforeEach(function () {
-        parent = location.levels[0];
-        level2 = location.levels[1];
-        level3 = location.levels[2];
+        parent = location.levels[FIRST];
+        level2 = location.levels[SECOND];
+        level3 = location.levels[THIRD];
         level3.selected = level3.items[0]; // selects third level
         level3.update();
       });

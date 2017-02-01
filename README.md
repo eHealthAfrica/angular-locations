@@ -18,6 +18,8 @@ To add a new country:
 * build
 * release the new version.
 
-On new releases, update the version in [the
+To release a new version:
+
+Update the version in [the
 changelog](/blob/master/CHANGELOG.md) and in `bower.json` and and add
-a new tag.
+a new tag. Don't forget to commit the build under `/dist`.
