@@ -25,6 +25,7 @@
     "karma-chrome-launcher": "^0.1.4",
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4",
+    "karma-spec-reporter": "0.0.26",
     "ng-annotate": "^0.15.4"
   },
   "engines": {
