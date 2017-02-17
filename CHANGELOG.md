@@ -5,6 +5,10 @@ file. This file is structured according to http://keepachangelog.com/
 
 - - -
 
+## 4.2.1 - 2017-02-16
+
+- use `locations` 4.1.1
+
 ## 4.2.0 - 2016-15-12
 
 - Add an `encode` method to location levels
