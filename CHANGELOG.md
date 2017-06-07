@@ -5,6 +5,12 @@ file. This file is structured according to http://keepachangelog.com/
 
 - - -
 
+## 4.3.0 - 2017-06-07
+
+- add a `setLike` method to a selected location, which updates the
+  location in place in order to have the same value of another
+  selected location which is used as a reference
+
 ## 4.2.1 - 2017-02-16
 
 - use `locations` 4.1.1

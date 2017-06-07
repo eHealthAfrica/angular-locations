@@ -234,6 +234,14 @@ describe('Service: SelectedLocationFactory', function () {
         expect(cloned.compare(location)).toBe(true);
         expect(location.levels[FIRST].selected).toEqual(cloned.levels[FIRST].selected);
       });
+      it('can set itself like another location', function() {
+        var different = selectedLocationFactory({
+          locationsData: testLocationData
+        });
+        // this customisation will be undone by `setLike` on the next line
+        different.select(2, 1);
+        expect(different.setLike(location).compare(location)).toBe(true);
+      });
       it('reads admin divisions', function() {
         location.setAdminDivisions({
           adminDivision1: 1,
