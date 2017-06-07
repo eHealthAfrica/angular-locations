@@ -197,15 +197,19 @@ angular.module('eHealth.locations.services')
           levels[level].selectById(id);
           levels[level].update();
         },
-        clone: function() {
-          var cloned = create(options);
-          for (var i=0; i<cloned.levels.length; i++) {
-            var selected = levels[i].selected;
-            if (selected) {
-              cloned.levels[i].selectById(selected.id);
+        setLike: function(reference) {
+          for (var i=0; i < reference.levels.length; i++) {
+            var source = reference.levels[i];
+            var destination = levels[i];
+            if (source.selected) {
+              destination.selectById(source.selected.id);
             }
           }
-          return cloned;
+          return location;
+        },
+        clone: function() {
+          var cloned = create(options);
+          return cloned.setLike(location);
         },
         compare: function(other) {
           // two locations are equal unless proven to be different
