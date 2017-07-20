@@ -5,6 +5,11 @@ file. This file is structured according to http://keepachangelog.com/
 
 - - -
 
+## 4.3.1 - 2017-07-20
+
+- Dependency bump: use location 4.1.2
+
+
 ## 4.3.0 - 2017-06-07
 
 - add a `setLike` method to a selected location, which updates the
