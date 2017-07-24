@@ -5,6 +5,10 @@ file. This file is structured according to http://keepachangelog.com/
 
 - - -
 
+## 4.3.2 - 2017-07-20
+
+- Fix: added missing locations from 4.3.1
+
 ## 4.3.1 - 2017-07-20
 
 - Dependency bump: use location 4.1.2
