@@ -40,7 +40,7 @@ angular.module('eHealth.locations.data', [])
 
 .constant('mg', [{depth:0,name:'region',plural:'regions',items:[{name:'diana',id:'DIA'},{name:'sava',id:'SAV'},{name:'itasy',id:'ITA'},{name:'analamanga',id:'ANM'},{name:'vakinankaratra',id:'VAK'},{name:'bongolava',id:'BON'},{name:'sofia',id:'SOF'},{name:'boeny',id:'BOE'},{name:'betsiboka',id:'BES'},{name:'melaky',id:'MEL'},{name:'alaotra-mangoro',id:'AMA'},{name:'atsinanana',id:'ATS'},{name:'analanjirofo',id:'ANN'},{name:'amoron\'i mania',id:'AMO'},{name:'matsiatra ambony',id:'MAT'},{name:'vatovavy-fitovinany',id:'VFI'},{name:'atsimo-atsinanana',id:'AAT'},{name:'ihorombe',id:'IHO'},{name:'menabe',id:'MEN'},{name:'atsimo-andrefana',id:'AAN'},{name:'androy',id:'AND'},{name:'anosy',id:'ANO'}]}])
 
-;'use strict';
+;
 
 angular.module('eHealth.locations.directives')
   .directive('selectedAdminDivision', function () {
@@ -63,15 +63,15 @@ angular.module('eHealth.locations.directives')
       }
     };
   });
-'use strict';
+
 
 angular.module('eHealth.locations.filters')
-  .filter('adminDivision', function (locations, $filter) {
+  .filter('adminDivision', ["locations", "$filter", function (locations, $filter) {
     return function (id, level) {
       return locations.decode(id, level-1);
     };
-  });
-'use strict';
+  }]);
+
 
 angular.module('eHealth.locations.services')
   .provider('locations', function() {
@@ -90,10 +90,10 @@ angular.module('eHealth.locations.services')
       }
     }];
   });
-'use strict';
+
 
 angular.module('eHealth.locations.services')
-  .factory('locationsFactory', function($log, ml, gn, lr, lr_clans, sl, mg) {
+  .factory('locationsFactory', ["$log", "ml", "gn", "lr", "lr_clans", "sl", "mg", function($log, ml, gn, lr, lr_clans, sl, mg) {
     var map = {
       ml: ml,
       gn: gn,
@@ -152,11 +152,11 @@ angular.module('eHealth.locations.services')
         throw new Error(e);
       }
     };
-  });
-'use strict';
+  }]);
+
 
 angular.module('eHealth.locations.services')
-  .factory('selectedLocationFactory', function (locations, $log) {
+  .factory('selectedLocationFactory', ["locations", "$log", function (locations, $log) {
 
     // Restrict locations. This originally leveraged lodash/underscore _.filter
     // & _.find functions, as lodash/underscore is not available in this
@@ -432,5 +432,5 @@ angular.module('eHealth.locations.services')
       return location;
     }
     return create;
-  });
+  }]);
 })(window, document);
